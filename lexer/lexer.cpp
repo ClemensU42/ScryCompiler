@@ -7,11 +7,12 @@
 #include <string>
 #include <algorithm>
 #include <iostream>
+#include <set>
 
 #include "lexer.h"
 #include "consoleColors.h"
 
-static const std::vector<std::string> doubleCharOperators = {
+static const std::set<std::string> doubleCharOperators = {
 		"++",
 		"--",
 		"+=",
@@ -69,7 +70,6 @@ std::vector<lexer::Token> lexer::ParseStringToTokens(std::string source) {
 			// check if it's a string
 			if(firstChar == '\"'){
 				while(true) {
-					std::cout << GREEN << source[i] << RESET << std::endl;
 					if(i == source.length() - 1){
 						std::cerr << RED << "String has not been terminated!" << RESET << std::endl;
 						return {};
@@ -84,11 +84,11 @@ std::vector<lexer::Token> lexer::ParseStringToTokens(std::string source) {
 
 			// check for certain longer operators like ++, --, ==, etc. to turn them into a single token
 			if (i < source.length()) { // check if 'i' is not the last character, so we don't access invalid memory
-				char nextChar = source[i + 1];
+				char nextChar = source[i];
+
 				std::string doubleCharToken(1, firstChar);
 				doubleCharToken += nextChar;
-				if (std::find(doubleCharOperators.begin(), doubleCharOperators.end(), doubleCharToken) !=
-					doubleCharOperators.end()) {
+				if (doubleCharOperators.find(doubleCharToken) != doubleCharOperators.end()) {
 					// 'doubleCharToken' is contained in the 'doubleCharOperators' vector
 					currentToken = doubleCharToken;
 					i++;
