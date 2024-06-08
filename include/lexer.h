@@ -5,18 +5,31 @@
 #ifndef SKIBIDICOMPILER_LEXER_H
 #define SKIBIDICOMPILER_LEXER_H
 
-enum Token{
-    token_eof = -1,
+#include <vector>
 
-    // commands
-    tok_fn = -2,
-    tok_extern = -3,
+namespace lexer {
 
-    // primary
-    tok_identifier = -4,
-    tok_i32 = -5
-};
+    enum TokenTypes {
+        tok_other,
+        tok_eof,
 
-int gettok();
+        // commands
+        tok_fn,
+        tok_extern,
+        tok_var,
+
+        // primary
+        tok_identifier,
+        tok_number,
+		tok_string,
+    };
+
+    struct Token{
+        TokenTypes type;
+        std::string tokenContent;
+    };
+
+    std::vector<Token> ParseStringToTokens(std::string source);
+}
 
 #endif //SKIBIDICOMPILER_LEXER_H

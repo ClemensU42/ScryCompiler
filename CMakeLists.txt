@@ -16,6 +16,7 @@ add_executable(${BIN_NAME}
         lexer/lexer.cpp
         include/ast.h
         AST/ast.cpp
+		include/consoleColors.h
 )
 
 target_include_directories(${BIN_NAME} PRIVATE include ${LLVM_INCLUDE_DIRS})

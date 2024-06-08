@@ -5,50 +5,98 @@
 #include <cctype>
 #include <cstdio>
 #include <string>
+#include <algorithm>
+#include <iostream>
+
 #include "lexer.h"
+#include "consoleColors.h"
 
-static std::string IdentifierStr;   // Filled in if tok_identifier
-static int32_t I32Val;                  // Filled in if tok_i32
+static const std::vector<std::string> doubleCharOperators = {
+		"++",
+		"--",
+		"+=",
+		"-=",
+		"^=",
+		"*=",
+		"/=",
+		"==",
+		"!=",
+		"<=",
+		">=",
+		"&=",
+		"&&",
+		"||",
+		"|=",
+		"::"
+};
 
-int gettok(){
-    static int lastChar = ' ';
+/**
+ * Separates all tokens in the input string and stores them in a vector
+ * @param source - is the input string that should be tokenized
+ * @return std::vector<lexer::Token> - is the output vector that contains all tokens
+ */
+std::vector<lexer::Token> lexer::ParseStringToTokens(std::string source) {
+	std::vector<lexer::Token> tokens = std::vector<lexer::Token>();
 
-    while(isspace(lastChar))
-        lastChar = getchar();
-    if(isalpha(lastChar)){ // identifier: [a-zA-Z][a-zA-Z0-9]
-        IdentifierStr = std::to_string(lastChar);
-        while(isalnum((lastChar = getchar())))
-            IdentifierStr += std::to_string(lastChar);
-        if(IdentifierStr == "fn")
-            return tok_fn;
-        if(IdentifierStr == "extern")
-            return tok_extern;
-        return tok_identifier;
-    }
-    if(isdigit(lastChar)){ // Number: [0-9] // TODO: implement different types (int, float, etc.)
-        std::string numStr;
-        do{
-            numStr += std::to_string(lastChar);
-            lastChar = getchar();
-        } while (isdigit(lastChar));
+	std::cout << "source length: " << source.length() << std::endl;
 
-        I32Val = std::stoi(numStr);
-        return tok_i32;
-    }
-    if(lastChar == '#'){
-        // comment until end of line
-        do
-            lastChar = getchar();
-        while (lastChar != EOF && lastChar != '\n' && lastChar != '\r');
-        if(lastChar != EOF)
-            return gettok();
-    }
-    if(lastChar == EOF){ // check for end of file, don't eat it!
-        return token_eof;
-    }
+	// separate each token
+	size_t i = 0;
+	while (i < source.length()) {
+		std::string currentToken;
+		// skip any whitespace
+		while (isspace(source[i])) i++;
 
-    // otherwise, just return the character as it's ascii value
-    int thisChar = lastChar;
-    lastChar = getchar();
-    return thisChar;
+		// tokenize names, identifiers, numbers, etc.
+		if (isalnum(source[i])) {
+			currentToken += source[i++];
+			while (isalnum(source[i]))
+				currentToken += source[i++];
+			tokens.push_back(lexer::Token{TokenTypes::tok_identifier, currentToken});
+			continue;
+		}
+/*
+		if (source[i] == EOF) {
+			tokens.push_back(lexer::Token{TokenTypes::tok_eof, ""});
+			continue;
+		}
+*/
+		// tokenize other characters like ')', '+', etc.
+		if (isascii(source[i])) {
+			char firstChar = source[i++]; // store the current char in its own variable to avoid excess memory access
+			currentToken += firstChar;
+
+			// check if it's a string
+			if(firstChar == '\"'){
+				while(true) {
+					std::cout << GREEN << source[i] << RESET << std::endl;
+					if(i == source.length() - 1){
+						std::cerr << RED << "String has not been terminated!" << RESET << std::endl;
+						return {};
+					}
+
+					currentToken += source[i];
+					if(source[i++] == '\"') break;
+				}
+				tokens.push_back(lexer::Token{TokenTypes::tok_string, currentToken});
+				continue;
+			}
+
+			// check for certain longer operators like ++, --, ==, etc. to turn them into a single token
+			if (i < source.length()) { // check if 'i' is not the last character, so we don't access invalid memory
+				char nextChar = source[i + 1];
+				std::string doubleCharToken(1, firstChar);
+				doubleCharToken += nextChar;
+				if (std::find(doubleCharOperators.begin(), doubleCharOperators.end(), doubleCharToken) !=
+					doubleCharOperators.end()) {
+					// 'doubleCharToken' is contained in the 'doubleCharOperators' vector
+					currentToken = doubleCharToken;
+					i++;
+				}
+			}
+			tokens.push_back(lexer::Token{TokenTypes::tok_identifier, currentToken});
+			continue;
+		}
+	}
+	return tokens;
 }
