@@ -56,11 +56,9 @@ int main(int argc, char** argv) {
 
 	std::stringstream inputBuffer;
 	inputBuffer << inputFileStream.rdbuf();
-	std::cout << inputBuffer.str() << std::endl;
 
 	std::vector<lexer::Token> tokens = lexer::ParseStringToTokens(inputBuffer.str());
-	std::cout << std::flush;
-	std::cout << "token amount: " << tokens.size() << std::endl;
+
 	for(const lexer::Token& token : tokens)
 		std::cout << token.tokenContent << '\n';
 	std::cout << std::flush;
