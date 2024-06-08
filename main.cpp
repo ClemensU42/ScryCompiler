@@ -60,7 +60,7 @@ int main(int argc, char** argv) {
 	std::vector<lexer::Token> tokens = lexer::ParseStringToTokens(inputBuffer.str());
 
 	for(const lexer::Token& token : tokens)
-		std::cout << token.tokenContent << '\n';
+		std::cout << token << '\n';
 	std::cout << std::flush;
 
     return 0;

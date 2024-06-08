@@ -29,6 +29,8 @@ namespace lexer {
         std::string tokenContent;
     };
 
+	std::ostream& operator << (std::ostream& os, const Token& token);
+
     std::vector<Token> ParseStringToTokens(std::string source);
 }
 
