@@ -88,7 +88,7 @@ std::vector<lexer::Token> lexer::ParseStringToTokens(std::string source) {
 			if (firstChar == '\"') {
 				while (true) {
 					if (i == source.length() - 1) {
-						std::cerr << RED << "String has not been terminated!" << RESET << std::endl;
+						std::cerr << COLOR_RED << "String has not been terminated!" << COLOR_RESET << std::endl;
 						return {};
 					}
 

@@ -2,12 +2,13 @@
 // Created by clemens on 6/7/24.
 //
 
-#ifndef SKIBIDICOMPILER_AST_H
-#define SKIBIDICOMPILER_AST_H
+#ifndef SCRYCOMPILER_AST_H
+#define SCRYCOMPILER_AST_H
 
 #include <cstdint>
 #include <string>
 #include <memory>
+#include <utility>
 #include <vector>
 
 namespace ast {
@@ -18,12 +19,12 @@ namespace ast {
         virtual ~ExprAST() = default;
     };
 
-// I32ExprAST - Expression class for i32s like "157",
+// I32ExprAST - Expression class for signed 32-bit integers
     class I32ExprAST : public ExprAST {
         int32_t val;
 
     public:
-        I32ExprAST(int32_t val) : val(val) {}
+        explicit I32ExprAST(int32_t val) : val(val) {}
     };
 
 // VariableExprAST - Expression class for referencing a variable, like "foo"
@@ -31,7 +32,7 @@ namespace ast {
         std::string name;
 
     public:
-        VariableExrpAST(const std::string &name) : name(name) {}
+        explicit VariableExrpAST(std::string name) : name(std::move(name)) {}
     };
 
 // BinaryExprAST - Expression class for binary operator
@@ -107,4 +108,4 @@ namespace ast {
 
 }
 
-#endif //SKIBIDICOMPILER_AST_H
+#endif //SCRYCOMPILER_AST_H

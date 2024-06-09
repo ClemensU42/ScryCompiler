@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.27)
-project(SkibidiCompiler)
+project(ScryCompiler)
 
 set(CMAKE_CXX_STANDARD 20)
 
@@ -8,7 +8,7 @@ find_package(LLVM REQUIRED CONFIG)
 message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
 message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
 
-set(BIN_NAME skibidi)
+set(BIN_NAME scry)
 
 add_executable(${BIN_NAME}
         main.cpp

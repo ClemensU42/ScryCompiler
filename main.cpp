@@ -23,13 +23,13 @@ int main(int argc, char** argv) {
 				switch (optopt) {
 					case 'i':
 					case 'o':
-						std::cerr << RED << "Option -" << static_cast<char>(optopt) << " requires an argument." << RESET << std::endl;
+						std::cerr << COLOR_RED << "Option -" << static_cast<char>(optopt) << " requires an argument." << COLOR_RESET << std::endl;
 						break;
 					default:
 						if (isprint(optopt))
-							std::cerr << RED << "unknown option '-" << static_cast<char>(optopt) << "'." << RESET << std::endl;
+							std::cerr << COLOR_RED << "unknown option '-" << static_cast<char>(optopt) << "'." << COLOR_RESET << std::endl;
 						else
-							std::cerr << RED << "Unknown option character " << static_cast<char>(optopt) << RESET << std::endl;
+							std::cerr << COLOR_RED << "Unknown option character " << static_cast<char>(optopt) << COLOR_RESET << std::endl;
 						break;
 					return 1;
 				}
@@ -39,18 +39,18 @@ int main(int argc, char** argv) {
 	}
 
 	if(inputFilePath.empty()){
-		std::cerr << "\033[1;31m" << "Missing input file!" << RESET << std::endl;
+		std::cerr << "\033[1;31m" << "Missing input file!" << COLOR_RESET << std::endl;
 		return 0;
 	}
 
 	if(outputFilePath.empty()){
-		std::cerr << "\033[1;31m" << "Missing output file!" << RESET << std::endl;
+		std::cerr << "\033[1;31m" << "Missing output file!" << COLOR_RESET << std::endl;
 		// return 0;
 	}
 
 	std::ifstream inputFileStream(inputFilePath);
 	if(!inputFileStream.is_open()){
-		std::cerr << "\033[1;31m" << "Error opening file '" << inputFilePath << "'." << RESET << std::endl;
+		std::cerr << "\033[1;31m" << "Error opening file '" << inputFilePath << "'." << COLOR_RESET << std::endl;
 		return 0;
 	}
 

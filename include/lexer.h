@@ -2,8 +2,8 @@
 // Created by clemens on 6/6/24.
 //
 
-#ifndef SKIBIDICOMPILER_LEXER_H
-#define SKIBIDICOMPILER_LEXER_H
+#ifndef SCRYCOMPILER_LEXER_H
+#define SCRYCOMPILER_LEXER_H
 
 #include <vector>
 
@@ -34,4 +34,4 @@ namespace lexer {
     std::vector<Token> ParseStringToTokens(std::string source);
 }
 
-#endif //SKIBIDICOMPILER_LEXER_H
+#endif //SCRYCOMPILER_LEXER_H
