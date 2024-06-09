@@ -1,7 +1,7 @@
-# Skibidi-Compiler
-Unlike the name, Skibidi is supposed to be an actually usable programming language, 
-inspired by languages like  C++, Rust, and others. The name originated from
-a joke between a friend of mine and me.
+# Scry-Compiler
+The Scry-Compiler is the compiler for the Scry programming language I am currently working on.
+I develop Scry mostly as a challenge for myself, to make a usable language, inspired by
+programming languages like Rust and C++.
 
 A simple Hello World program would look like this:
 ```skibidi
