@@ -26,6 +26,7 @@ add_executable(${BIN_NAME}
 		include/consoleColors.h
 		AST/ParseNumExpr.cpp
 		AST/ParseExtern.cpp
+		AST/ParsePrototype.cpp
 )
 
 target_include_directories(${BIN_NAME} PRIVATE include ${LLVM_INCLUDE_DIRS})
