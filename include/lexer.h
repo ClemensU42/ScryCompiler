@@ -20,7 +20,8 @@ namespace lexer {
 
         // primary
         tok_identifier,
-        tok_number,
+        tok_int,
+		tok_float,
 		tok_string,
     };
 

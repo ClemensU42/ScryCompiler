@@ -18,7 +18,7 @@ fn main() : i32 {
     var a : mut u32 = 0;
     var b : mut u32 = 1;
     std::printlnf("{u32}\n{u32}", a, b);
-    for([0..length]){
+    for([0 -> length]){
         var c : u32 = a + b;
         a = b;
         b = c;

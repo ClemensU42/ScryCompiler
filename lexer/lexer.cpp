@@ -3,6 +3,7 @@
 //
 
 #include <cctype>
+#include <cstdint>
 #include <cstdio>
 #include <string>
 #include <algorithm>
@@ -29,7 +30,10 @@ static const std::set<std::string> doubleCharOperators = {
 		"||",
 		"|=",
 		"::",
-		"//"
+		"//",
+		"..",
+		"<-",
+		"->"
 };
 
 /**
@@ -49,13 +53,36 @@ std::vector<lexer::Token> lexer::ParseStringToTokens(std::string source) {
 		// skip any whitespace
 		while (isspace(source[i])) i++;
 
-		// tokenize names, identifiers, numbers, etc.
+		// numbers
+		if(isdigit(source[i])){
+			currentToken += source[i++];
+			while(isdigit(source[i]) || source[i] == '.')
+				currentToken += source[i++];
+			// check if number is valid
+			uint16_t pointAmountInNum = 0;
+			for(size_t k = 0; k < currentToken.length(); k++)
+				pointAmountInNum += (uint8_t)(currentToken[k] == '.');
+
+			TokenTypes currentNumType;
+
+			if(pointAmountInNum == 0)
+				currentNumType = TokenTypes::tok_int;
+			else if (pointAmountInNum == 1)
+				currentNumType = TokenTypes::tok_float;
+			else
+				throw std::runtime_error(COLOR_RED + currentToken + " is not a valid number!");
+
+			tokens.push_back(lexer::Token{currentNumType, currentToken});
+			continue;
+		}
+
+		// names, identifiers, etc.
 		if (isalnum(source[i])) {
 			currentToken += source[i++];
 			while (isalnum(source[i]))
 				currentToken += source[i++];
 
-			TokenTypes currentTokenType = TokenTypes::tok_identifier;
+			TokenTypes currentTokenType;
 
 			if (currentToken == "fn")
 				currentTokenType = TokenTypes::tok_fn;
@@ -63,12 +90,8 @@ std::vector<lexer::Token> lexer::ParseStringToTokens(std::string source) {
 				currentTokenType = TokenTypes::tok_extern;
 			else if (currentToken == "var")
 				currentTokenType = TokenTypes::tok_var;
-
-			for (size_t j = 0; j < currentToken.length(); j++) {
-				if (!(isdigit(currentToken[j]) || currentToken[j] == '.')) break;
-				if (j == (currentToken.length()-1))
-					currentTokenType = TokenTypes::tok_number;
-			}
+			else
+				currentTokenType = TokenTypes::tok_identifier;
 
 			tokens.push_back(lexer::Token{currentTokenType, currentToken});
 			continue;
@@ -87,10 +110,8 @@ std::vector<lexer::Token> lexer::ParseStringToTokens(std::string source) {
 			// check if it's a string
 			if (firstChar == '\"') {
 				while (true) {
-					if (i == source.length() - 1) {
-						std::cerr << COLOR_RED << "String has not been terminated!" << COLOR_RESET << std::endl;
-						return {};
-					}
+					if (i == source.length() - 1)
+						throw std::runtime_error(COLOR_RED + "String has not been terminated!");
 
 					currentToken += source[i];
 					if (source[i++] == '\"') break;
@@ -135,11 +156,12 @@ static std::vector<std::string> tokenTypeNames = {
 
 		// primary
 		"Token_Identifier",
-		"Token_Number",
+		"Token_Integer",
+		"Token_Float",
 		"Token_String",
 };
 
 std::ostream &lexer::operator<<(std::ostream &os, const lexer::Token &token) {
 	return os << "Token Content: " << token.tokenContent
-			  << "\t\t\tToken Type: " << tokenTypeNames[token.type];
+			  << "\t\tToken Type: " << tokenTypeNames[token.type];
 }
