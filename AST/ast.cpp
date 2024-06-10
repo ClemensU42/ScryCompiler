@@ -11,7 +11,7 @@
 // BinopPrecedence - This holds the precedence for each binary operator that is defined
 static std::map<std::string, int> BinopPrecedence;
 
-int getBinopPrecedence(std::string& binop){
+int ast::getBinopPrecedence(std::string& binop){
 	if (!BinopPrecedence.contains(binop))
 		throw std::runtime_error(std::string(COLOR_RED + binop + " is not a valid operation!"));
 	return BinopPrecedence[binop];

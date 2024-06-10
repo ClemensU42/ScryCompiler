@@ -27,7 +27,7 @@ namespace ast {
         explicit I32ExprAST(int32_t val) : val(val) {}
     };
 
-// VariableExprAST - Expression class for referencing a variable, like "foo"
+// VariableExprAST - Expression class for referencing a variable
     class VariableExrpAST : public ExprAST {
         std::string name;
 
@@ -76,9 +76,7 @@ namespace ast {
                 : prototype(std::move(prototype)), body(std::move(body)) {}
     };
 
-    int getNextToken();
-
-    int getCurrentToken();
+	int getBinopPrecedence(std::string& binop);
 
     void installBinopPrecedences();
 
@@ -86,7 +84,7 @@ namespace ast {
 
     std::unique_ptr<PrototypeAST> LogErrorP(const char *str);
 
-    std::unique_ptr<ExprAST> ParseI32Expr();
+    std::unique_ptr<ExprAST> ParseNumExpr();
 
     std::unique_ptr<ExprAST> ParseParenExpr();
 

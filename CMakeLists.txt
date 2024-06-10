@@ -8,7 +8,14 @@ find_package(LLVM REQUIRED CONFIG)
 message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
 message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
 
-set(BIN_NAME scry)
+add_compile_options(
+		-Wall
+		-Werror
+		-O3
+		-g
+)
+
+set(BIN_NAME scryc)
 
 add_executable(${BIN_NAME}
         main.cpp
@@ -17,6 +24,8 @@ add_executable(${BIN_NAME}
         include/ast.h
         AST/ast.cpp
 		include/consoleColors.h
+		AST/ParseNumExpr.cpp
+		AST/ParseExtern.cpp
 )
 
 target_include_directories(${BIN_NAME} PRIVATE include ${LLVM_INCLUDE_DIRS})
