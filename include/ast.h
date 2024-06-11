@@ -11,6 +11,8 @@
 #include <utility>
 #include <vector>
 
+#include "lexer.h"
+
 namespace ast {
 
     enum VariableTypes {
@@ -28,12 +30,48 @@ namespace ast {
         custom_struct,
     };
 
-    class Variable{
+    class Expr{
+
+    public:
+        ~Expr() = default;
+    };
+
+    class VariableExpr : public Expr{
         std::string name;
         bool isMutable;
         std::string valueAsString;
     };
 
+    class PrototypeExpr : public Expr{
+        std::string name;
+        std::vector<std::string> args;
+    public:
+        PrototypeExpr(std::string name, std::vector<std::string> args) : name(std::move(name)), args(std::move(args)){}
+    };
+
+    class Scope{
+        std::map<std::string, std::unique_ptr<VariableExpr>> variables;
+        std::map<std::string, Expr> functions;
+    };
+
+    class FunctionExpr : public Expr{
+        std::unique_ptr<PrototypeExpr> prototype;
+        std::unique_ptr<Scope> bodyScope;
+
+    public:
+        FunctionExpr(std::unique_ptr<PrototypeExpr> prototype, std::unique_ptr<Scope> bodyScope)
+            : prototype(std::move(prototype)), bodyScope(std::move(bodyScope)){}
+    };
+
+    class ExternExpr : public Expr{
+        std::unique_ptr<PrototypeExpr> prototype;
+
+    public:
+        ExternExpr(std::unique_ptr<PrototypeExpr> prototype)
+            : prototype(std::move(prototype)) {}
+    };
+
+    std::unique_ptr<VariableExpr> ParseVariableExpression(std::vector<lexer::Token>& tokens, size_t* currentIndexPtr);
 
 }
 

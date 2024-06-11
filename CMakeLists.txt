@@ -24,6 +24,7 @@ add_executable(${BIN_NAME}
         include/ast.h
         AST/ast.cpp
 		include/consoleColors.h
+		AST/ParseVariableExpression.cpp
 )
 
 target_include_directories(${BIN_NAME} PRIVATE include ${LLVM_INCLUDE_DIRS})
