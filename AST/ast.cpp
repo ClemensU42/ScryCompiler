@@ -23,4 +23,16 @@ void installBinopPrecedences(){
     BinopPrecedence["+"] = 20;
     BinopPrecedence["-"] = 20;
     BinopPrecedence["*"] = 40;
+    BinopPrecedence["/"] = 40;
 }
+
+std::unique_ptr<ast::Scope> ast::ParseTopLevelScope(const std::vector<lexer::Token>& tokenArray){
+    std::unique_ptr<Scope> scope;
+
+    size_t currentTokenIndex = 0;
+
+
+
+    return scope;
+}
+

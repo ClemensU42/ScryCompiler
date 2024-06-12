@@ -39,7 +39,11 @@ namespace ast {
     class VariableExpr : public Expr{
         std::string name;
         bool isMutable;
-        std::string valueAsString;
+        std::unique_ptr<Expr> value;
+
+    public:
+        VariableExpr(std::string name, bool isMutable, std::unique_ptr<Expr> value)
+            : name(std::move(name)), isMutable(isMutable), value(std::move(value)){}
     };
 
     class PrototypeExpr : public Expr{
@@ -52,6 +56,10 @@ namespace ast {
     class Scope{
         std::map<std::string, std::unique_ptr<VariableExpr>> variables;
         std::map<std::string, Expr> functions;
+        std::vector<std::unique_ptr<Expr>> expressions;
+
+    public:
+        Scope()= default;
     };
 
     class FunctionExpr : public Expr{
@@ -70,9 +78,12 @@ namespace ast {
         ExternExpr(std::unique_ptr<PrototypeExpr> prototype)
             : prototype(std::move(prototype)) {}
     };
+        bool hasInitialValue;
 
-    std::unique_ptr<VariableExpr> ParseVariableExpression(std::vector<lexer::Token>& tokens, size_t* currentIndexPtr);
+    std::unique_ptr<VariableExpr> ParseVariableExpression(const std::vector<lexer::Token>& tokens, size_t* currentIndexPtr);
+    std::unique_ptr<Expr> ParseExpression(const std::vector<lexer::Token>& tokens, size_t* currentIndexPtr);
 
+    std::unique_ptr<Scope> ParseTopLevelScope(const std::vector<lexer::Token>& tokenArray);
 }
 
 #endif //SCRYCOMPILER_AST_H
