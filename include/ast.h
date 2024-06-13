@@ -37,6 +37,7 @@ namespace ast {
     };
 
     class VariableExpr : public Expr{
+	public:
         std::string name;
         bool isMutable;
         std::unique_ptr<Expr> value;
@@ -78,7 +79,9 @@ namespace ast {
         ExternExpr(std::unique_ptr<PrototypeExpr> prototype)
             : prototype(std::move(prototype)) {}
     };
-        bool hasInitialValue;
+
+	std::ostream& operator << (std::ostream& os, const VariableExpr& varExpr);
+
 
     std::unique_ptr<VariableExpr> ParseVariableExpression(const std::vector<lexer::Token>& tokens, size_t* currentIndexPtr);
     std::unique_ptr<Expr> ParseExpression(const std::vector<lexer::Token>& tokens, size_t* currentIndexPtr);

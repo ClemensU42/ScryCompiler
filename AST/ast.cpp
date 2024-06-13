@@ -36,3 +36,7 @@ std::unique_ptr<ast::Scope> ast::ParseTopLevelScope(const std::vector<lexer::Tok
     return scope;
 }
 
+std::ostream& operator << (std::ostream& os, const ast::VariableExpr& varExpr){
+	return os << "Variable name: " << varExpr.name
+			<< "\nIs variable mutable: " << varExpr.isMutable << std::endl;
+}
