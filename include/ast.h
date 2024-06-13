@@ -10,6 +10,7 @@
 #include <memory>
 #include <utility>
 #include <vector>
+#include <map>
 
 #include "lexer.h"
 
@@ -55,6 +56,7 @@ namespace ast {
     };
 
     class Scope{
+    public:
         std::map<std::string, std::unique_ptr<VariableExpr>> variables;
         std::map<std::string, Expr> functions;
         std::vector<std::unique_ptr<Expr>> expressions;

@@ -3,6 +3,7 @@
 //
 
 #include <map>
+#include <iostream>
 #include "ast.h"
 #include "lexer.h"
 #include "consoleColors.h"
@@ -27,16 +28,19 @@ void installBinopPrecedences(){
 }
 
 std::unique_ptr<ast::Scope> ast::ParseTopLevelScope(const std::vector<lexer::Token>& tokenArray){
-    std::unique_ptr<Scope> scope;
+    std::unique_ptr<Scope> scope = std::make_unique<Scope>();
 
     size_t currentTokenIndex = 0;
 
-
+    while(currentTokenIndex < tokenArray.size()){
+        scope->expressions.push_back(ParseExpression(tokenArray, &currentTokenIndex));
+        currentTokenIndex++;
+    }
 
     return scope;
 }
 
-std::ostream& operator << (std::ostream& os, const ast::VariableExpr& varExpr){
+std::ostream& ast::operator << (std::ostream& os, const ast::VariableExpr& varExpr){
 	return os << "Variable name: " << varExpr.name
 			<< "\nIs variable mutable: " << varExpr.isMutable << std::endl;
 }

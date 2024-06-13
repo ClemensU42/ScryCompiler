@@ -31,14 +31,14 @@ std::unique_ptr<ast::VariableExpr> ast::ParseVariableExpression(const std::vecto
     // get type of variable
     // TODO: make function var type require a function prototype as type
     std::string varTypeStr = tokens[(*currentIndexPtr)++].tokenContent;
-    ast::VariableTypes varType = ast::VariableTypes::custom_struct;
+    /*ast::VariableTypes varType = ast::VariableTypes::custom_struct;
     if(StringsOfVariableTypes.contains(varTypeStr))
-        varType = StringsOfVariableTypes[varTypeStr];
+        varType = StringsOfVariableTypes[varTypeStr];*/
 
     std::unique_ptr<ast::Expr> varContentExpr = nullptr;
     // check if variable has been initialized
     if(tokens[*currentIndexPtr].tokenContent == "="){
-        lexer::TokenTypes valueType = tokens[(*currentIndexPtr) + 1].type;
+        //lexer::TokenTypes valueType = tokens[(*currentIndexPtr) + 1].type;
         // TODO: read float / int / string expression
     }
 
