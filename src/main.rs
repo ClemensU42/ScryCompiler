@@ -2,6 +2,7 @@ mod lexer;
 
 use std::error::Error;
 use std::fs;
+use crate::lexer::Lexer;
 
 fn main() -> Result<(), Box<dyn Error>>{
     let mut input_file: String = String::new();
@@ -14,6 +15,9 @@ fn main() -> Result<(), Box<dyn Error>>{
 
     if input_file.is_empty() { return Err(Box::from("no input file specified!")); }
     let input_file_content: String = fs::read_to_string(input_file)?;
-    println!("{input_file_content}");
+
+    let lexer: Lexer = Lexer::new(input_file_content)?;
+
+    println!("{:?}", lexer.tokens);
     Ok(())
 }
