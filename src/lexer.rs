@@ -29,56 +29,34 @@ impl Lexer{
         let mut tokens: Vec<Token> = Vec::new();
         let mut content_bytes = file.as_bytes();
 
-        for mut i in 0..file.len(){
-            // skip whitespaces
-            if content_bytes[i].is_ascii_whitespace() { continue; }
+        let mut i : usize = 0;
+        while i < content_bytes.len(){
+            let mut token_vec: Vec<u8> = Vec::new();
 
-            // check for numbers
+            // skip whitespaces
+            while content_bytes[i].is_ascii_whitespace() { i += 1; }
+
+            // numbers
             if content_bytes[i].is_ascii_digit(){
-                let mut number_vec: Vec<u8> = Vec::new();
-                number_vec.push(content_bytes[i]);
-                i += 1;
-                loop{
-                    if i == file.len() { break; }
-                    if content_bytes[i].is_ascii_hexdigit() || content_bytes[i] as char == '.'
-                        || content_bytes[i] as char == 'b' || content_bytes[i] as char == 'x'{
-                        number_vec.push(content_bytes[i]);
-                        i += 1;
+                token_vec.push(content_bytes[i]); i += 1;
+                while content_bytes[i].is_ascii_digit()
+                    || content_bytes[i] as char == '.'
+                    || content_bytes[i] as char == 'b'
+                    || content_bytes[i] as char == 'x'{
+                    token_vec.push(content_bytes[i]); i += 1;
+                }
+                // check if number is hex or binary
+                if token_vec[1] as char == 'x' || token_vec[1] as char == 'b'{
+                    if token_vec[0] as char == '0'{
+                        // TODO: check if only valid digits are used
+
                     } else {
-                        if number_vec.len() == 1 {
-                            tokens.push(Token{
-                                content: String::from_utf8(number_vec.clone())?,
-                                token_type: TokenType::Integer
-                            });
-                            break;
-                        }
-                        tokens.push(Token{
-                            content: String::from_utf8(number_vec.clone())?,
-                            token_type: if number_vec[0] as char == '0'{
-                                match number_vec[1] as char {
-                                    'x' => TokenType::HexNumber,
-                                    'b' => TokenType::BinaryNumber,
-                                    _ => {if number_vec.contains(&('.' as u8)){
-                                        TokenType::Float
-                                    } else {
-                                        TokenType::Integer
-                                    }}
-                                }
-                            } else {
-                                if number_vec.contains(&('.' as u8)){
-                                    TokenType::Float
-                                } else {
-                                    TokenType::Integer
-                                }
-                            }
-                        });
-                        break;
+                        return Err(Box::from("invalid hex or binary number!"))
                     }
                 }
-                continue;
+                // check if number is valid
+                let mut non_digit_amount : u16 = 0;
             }
-
-            // TODO: other tokens
         }
 
         Ok(Lexer{ tokens })
