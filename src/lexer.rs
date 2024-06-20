@@ -45,15 +45,26 @@ impl Lexer{
                     || content_bytes[i] as char == 'x'{
                     token_vec.push(content_bytes[i]); i += 1;
                 }
-                // check if number is hex or binary
-                if token_vec[1] as char == 'x' || token_vec[1] as char == 'b'{
+
+                // check if number is hex
+                if token_vec[1] as char == 'x'{
                     if token_vec[0] as char == '0'{
                         // TODO: check if only valid digits are used
 
                     } else {
-                        return Err(Box::from("invalid hex or binary number!"))
+                        return Err(Box::from("invalid hex number!"))
                     }
                 }
+                // check if number is binary
+                if token_vec[1] as char == 'b'{
+                    if token_vec[0] as char == '0'{
+                        // TODO: check if only valid digits are used
+
+                    } else {
+                        return Err(Box::from("invalid binary number!"))
+                    }
+                }
+
                 // check if number is valid
                 let mut non_digit_amount : u16 = 0;
             }
