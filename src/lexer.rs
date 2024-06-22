@@ -49,8 +49,11 @@ impl Lexer{
                 // check if number is hex
                 if token_vec[1] as char == 'x'{
                     if token_vec[0] as char == '0'{
-                        // TODO: check if only valid digits are used
-
+                        for k in 2..token_vec.len(){
+                            if !token_vec[k].is_ascii_hexdigit() {
+                                return Err(Box::from("invalid hex number!"))
+                            }
+                        }
                     } else {
                         return Err(Box::from("invalid hex number!"))
                     }
@@ -58,8 +61,11 @@ impl Lexer{
                 // check if number is binary
                 if token_vec[1] as char == 'b'{
                     if token_vec[0] as char == '0'{
-                        // TODO: check if only valid digits are used
-
+                        for k in 2..token_vec.len(){
+                            if !(token_vec[k] as char == '0' || token_vec[k] as char == '1'){
+                                return Err(Box::from("invalid binary number!"))
+                            }
+                        }
                     } else {
                         return Err(Box::from("invalid binary number!"))
                     }
